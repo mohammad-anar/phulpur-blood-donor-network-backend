@@ -11,7 +11,6 @@ export const env = {
   bcrypt_salt_round: Number(process.env.BCRYPT_SALT_ROUND) || 10,
   cors_origin: process.env.CORS_ORIGIN || "*",
   frontend_url: process.env.FRONTEND_URL || "http://localhost:3000",
-  redis_url: process.env.REDIS_URL || "redis://localhost:6379",
   cloudinary: {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "",
     api_key: process.env.CLOUDINARY_API_KEY || "",

@@ -1,7 +1,6 @@
 import app from "./app.js";
 import env from "./config/env.js";
 import { initSocket } from "./config/socket.js";
-import { connectRedis } from "./config/redis.js";
 import { seedSuperAdmin } from "./utils/seedSuperAdmin.js";
 
 let server: any;
@@ -16,9 +15,6 @@ async function bootstrap() {
   try {
     // Seed default super admin only
     await seedSuperAdmin();
-
-    // Connect to Redis
-    await connectRedis();
 
     // Start HTTP server
     server = app.listen(env.port, () => {
