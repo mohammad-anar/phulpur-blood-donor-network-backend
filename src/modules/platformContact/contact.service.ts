@@ -1,9 +1,9 @@
 import prisma from "../../config/prisma.js";
 
 const DEFAULT_CONTACT = {
-  phone: "০১৭১২-৩৪৫৬৭৮",
-  email: "contact@phulpurblood.org",
-  whatsapp: "+8801712345678",
+  phone: "০১৯৭২-৬০৬২৫৫",
+  email: "bonnochobi@gmail.com",
+  whatsapp: "+8801972606255",
 };
 
 const getPlatformContact = async () => {

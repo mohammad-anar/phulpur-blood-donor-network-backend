@@ -3,7 +3,6 @@ import env from "./config/env.js";
 import { initSocket } from "./config/socket.js";
 import { connectRedis } from "./config/redis.js";
 import { seedSuperAdmin } from "./utils/seedSuperAdmin.js";
-import { seedInitialData } from "./utils/seedInitialData.js";
 
 let server: any;
 
@@ -15,11 +14,8 @@ process.on("uncaughtException", (error) => {
 
 async function bootstrap() {
   try {
-    // Seed default super admin
+    // Seed default super admin only
     await seedSuperAdmin();
-
-    // Seed initial Fulpur blood network data if empty
-    await seedInitialData();
 
     // Connect to Redis
     await connectRedis();

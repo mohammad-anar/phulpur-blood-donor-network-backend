@@ -243,6 +243,34 @@ const unblockDonor = async (id: string, adminUser: any) => {
   };
 };
 
+const deleteDonor = async (id: string, adminUser: any) => {
+  validateObjectId(id, "donorId");
+
+  const target = await prisma.user.findUnique({ where: { id } });
+  if (!target) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Donor account not found");
+  }
+
+  if (target.role === UserRole.SUPERADMIN) {
+    throw new ApiError(
+      StatusCodes.FORBIDDEN,
+      "সুপার অ্যাডমিন অ্যাকাউন্ট মুছে ফেলা সম্ভব নয়।",
+    );
+  }
+
+  // Delete all associated blood donation records to preserve database consistency
+  await prisma.bloodDonateRecord.deleteMany({ where: { donorId: id } });
+
+  // Delete donor account
+  await prisma.user.delete({ where: { id } });
+
+  return {
+    id,
+    name: target.name,
+    message: "রক্তদাতার অ্যাকাউন্ট ও সংশ্লিষ্ট সকল তথ্য সফলভাবে মুছে ফেলা হয়েছে।",
+  };
+};
+
 const getOperationalReports = async () => {
   const [
     totalDonors,
@@ -433,6 +461,7 @@ export const AdminService = {
   rejectDonor,
   blockDonor,
   unblockDonor,
+  deleteDonor,
   getOperationalReports,
   getAdminOverview,
 };

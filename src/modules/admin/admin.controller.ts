@@ -73,6 +73,18 @@ const unblockDonor = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteDonor = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AdminService.deleteDonor(id, req.user);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: result.message,
+    data: result,
+  });
+});
+
 const getOperationalReports = catchAsync(async (req: Request, res: Response) => {
   const result = await AdminService.getOperationalReports();
 
@@ -101,6 +113,7 @@ export const AdminController = {
   rejectDonor,
   blockDonor,
   unblockDonor,
+  deleteDonor,
   getOperationalReports,
   getAdminOverview,
 };

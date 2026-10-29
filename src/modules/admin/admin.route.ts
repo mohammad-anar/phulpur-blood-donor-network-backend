@@ -21,6 +21,7 @@ router.patch("/donors/:id/approve", AdminController.approveDonor);
 router.patch("/donors/:id/reject", AdminController.rejectDonor);
 router.patch("/donors/:id/block", AdminController.blockDonor);
 router.patch("/donors/:id/unblock", AdminController.unblockDonor);
+router.delete("/donors/:id", AdminController.deleteDonor);
 router.get("/reports", AdminController.getOperationalReports);
 
 // Admin donation verification
