@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync.js";
-import { getSingleFilePath } from "../../utils/getFilePath.js";
+import { getSingleFilePath, uploadFileToCloudinaryOrLocal } from "../../utils/getFilePath.js";
 import sendResponse from "../../utils/sendResponse.js";
 import { AuthServices } from "./auth.service.js";
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const profileImage =
+    (await uploadFileToCloudinaryOrLocal(
+      req.files,
+      ["profileImage", "image", "avatar"],
+      "phulpur_blood_network/profiles",
+    )) ||
     getSingleFilePath(req.files, "profileImage") ||
     getSingleFilePath(req.files, "image") ||
     getSingleFilePath(req.files, "avatar");

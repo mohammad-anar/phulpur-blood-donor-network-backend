@@ -38,13 +38,32 @@ const userSafeSelect = {
   updatedAt: true,
 };
 
+const normalizeLoginPhone = (input: string): string => {
+  const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+  let converted = input;
+  bengaliDigits.forEach((digit, idx) => {
+    converted = converted.split(digit).join(idx.toString());
+  });
+  const digitsOnly = converted.replace(/[^0-9]/g, "");
+  if (digitsOnly.startsWith("880") && digitsOnly.length === 13) {
+    return "0" + digitsOnly.slice(3);
+  }
+  return digitsOnly;
+};
+
 const registerUser = async (payload: IRegisterUser) => {
-  const cleanPhone = payload.phone.trim();
+  const normalizedDigits = normalizeLoginPhone(payload.phone);
+  const cleanPhone = normalizedDigits || payload.phone.trim();
   const normalizedBloodGroup = normalizeBloodGroup(payload.bloodGroup);
 
-  // Check unique phone
-  const existingPhone = await prisma.user.findUnique({
-    where: { phone: cleanPhone },
+  // Check unique phone across normalized formats
+  const existingPhone = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { phone: cleanPhone },
+        { phone: payload.phone.trim() },
+      ],
+    },
   });
   if (existingPhone) {
     throw new ApiError(StatusCodes.CONFLICT, "Phone number is already registered");
@@ -87,19 +106,6 @@ const registerUser = async (payload: IRegisterUser) => {
     bloodGroupDetails: formatBloodGroupDetails(created.bloodGroup),
     message: "Registration submitted successfully. Your account is pending administrator verification.",
   };
-};
-
-const normalizeLoginPhone = (input: string): string => {
-  const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-  let converted = input;
-  bengaliDigits.forEach((digit, idx) => {
-    converted = converted.split(digit).join(idx.toString());
-  });
-  const digitsOnly = converted.replace(/[^0-9]/g, "");
-  if (digitsOnly.startsWith("880") && digitsOnly.length === 13) {
-    return "0" + digitsOnly.slice(3);
-  }
-  return digitsOnly;
 };
 
 const loginUser = async (payload: ILoginUser) => {

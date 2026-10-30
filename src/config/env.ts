@@ -11,6 +11,7 @@ export const env = {
   bcrypt_salt_round: Number(process.env.BCRYPT_SALT_ROUND) || 10,
   cors_origin: process.env.CORS_ORIGIN || "*",
   frontend_url: process.env.FRONTEND_URL || "http://localhost:3000",
+  server_url: process.env.SERVER_URL || `http://localhost:${Number(process.env.PORT) || 5001}`,
   cloudinary: {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "",
     api_key: process.env.CLOUDINARY_API_KEY || "",

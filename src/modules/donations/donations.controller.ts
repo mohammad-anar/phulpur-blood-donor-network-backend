@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync.js";
-import { getSingleFilePath } from "../../utils/getFilePath.js";
+import { getSingleFilePath, uploadFileToCloudinaryOrLocal } from "../../utils/getFilePath.js";
 import pick from "../../utils/pick.js";
 import sendResponse from "../../utils/sendResponse.js";
 import { DonationsService } from "./donations.service.js";
@@ -9,6 +9,11 @@ import { DonationsService } from "./donations.service.js";
 const createDonation = catchAsync(async (req: Request, res: Response) => {
   const donorId = req.user.id;
   const slipFile =
+    (await uploadFileToCloudinaryOrLocal(
+      req.files,
+      ["slip", "donationSlip", "image"],
+      "phulpur_blood_network/slips",
+    )) ||
     getSingleFilePath(req.files, "slip") ||
     getSingleFilePath(req.files, "donationSlip") ||
     getSingleFilePath(req.files, "image");
@@ -63,7 +68,7 @@ const getAllDonationsForAdmin = catchAsync(async (req: Request, res: Response) =
 });
 
 const approveDonation = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const verifierId = req.user.id;
   const result = await DonationsService.approveDonation(id, verifierId);
 
@@ -76,7 +81,7 @@ const approveDonation = catchAsync(async (req: Request, res: Response) => {
 });
 
 const rejectDonation = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const verifierId = req.user.id;
   const result = await DonationsService.rejectDonation(id, verifierId);
 

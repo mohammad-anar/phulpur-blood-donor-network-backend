@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync.js";
-import { getSingleFilePath } from "../../utils/getFilePath.js";
+import { getSingleFilePath, uploadFileToCloudinaryOrLocal } from "../../utils/getFilePath.js";
 import sendResponse from "../../utils/sendResponse.js";
 import { UserServices } from "./users.service.js";
 
@@ -26,7 +26,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getUserById = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.getUserById(req.params.id);
+  const result = await UserServices.getUserById(req.params.id as string);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -36,7 +36,7 @@ const getUserById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.updateUser(req.params.id, req.body);
+  const result = await UserServices.updateUser(req.params.id as string, req.body);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -46,7 +46,7 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.deleteUser(req.params.id);
+  const result = await UserServices.deleteUser(req.params.id as string);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -69,6 +69,11 @@ const updateMyEmail = catchAsync(async (req: Request, res: Response) => {
 const updateMyProfileImage = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const uploadedPath =
+    (await uploadFileToCloudinaryOrLocal(
+      req.files,
+      ["profileImage", "image", "avatar"],
+      "phulpur_blood_network/profiles",
+    )) ||
     getSingleFilePath(req.files, "profileImage") ||
     getSingleFilePath(req.files, "image") ||
     getSingleFilePath(req.files, "avatar");

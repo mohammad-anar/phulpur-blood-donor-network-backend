@@ -26,7 +26,7 @@ const getAllDonors = catchAsync(async (req: Request, res: Response) => {
 });
 
 const approveDonor = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await AdminService.approveDonor(id, req.user);
 
   sendResponse(res, {
@@ -38,7 +38,7 @@ const approveDonor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const rejectDonor = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await AdminService.rejectDonor(id, req.user);
 
   sendResponse(res, {
@@ -50,7 +50,7 @@ const rejectDonor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const blockDonor = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await AdminService.blockDonor(id, req.user);
 
   sendResponse(res, {
@@ -62,7 +62,7 @@ const blockDonor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const unblockDonor = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await AdminService.unblockDonor(id, req.user);
 
   sendResponse(res, {
@@ -74,7 +74,7 @@ const unblockDonor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteDonor = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await AdminService.deleteDonor(id, req.user);
 
   sendResponse(res, {

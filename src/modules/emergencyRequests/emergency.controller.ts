@@ -48,7 +48,7 @@ const getAllEmergencyRequests = catchAsync(async (req: Request, res: Response) =
 });
 
 const getEmergencyRequestById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await EmergencyService.getEmergencyRequestById(id);
 
   sendResponse(res, {
@@ -60,7 +60,7 @@ const getEmergencyRequestById = catchAsync(async (req: Request, res: Response) =
 });
 
 const updateEmergencyRequest = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await EmergencyService.updateEmergencyRequest(
     id,
     req.body,
@@ -76,7 +76,7 @@ const updateEmergencyRequest = catchAsync(async (req: Request, res: Response) =>
 });
 
 const updateStatus = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const { status } = req.body;
   const result = await EmergencyService.updateRequestStatus(
     id,
@@ -93,7 +93,7 @@ const updateStatus = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteEmergencyRequest = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await EmergencyService.deleteEmergencyRequest(id, req.user);
 
   sendResponse(res, {

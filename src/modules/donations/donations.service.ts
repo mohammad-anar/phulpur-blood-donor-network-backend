@@ -73,7 +73,7 @@ const createDonation = async (
 
   const slipUrl = slipFilePath || payload.slipUrl || null;
 
-  // Security: New submissions default to PENDING status and cannot assign verifier
+  // Direct Approval: Blood donation records are approved immediately without requiring manual admin approval
   const record = await prisma.bloodDonateRecord.create({
     data: {
       donorId,
@@ -82,7 +82,8 @@ const createDonation = async (
       rugirDhoron: payload.rugirDhoron?.trim() || null,
       donationSlipNumber: payload.donationSlipNumber?.trim() || null,
       slipUrl,
-      status: "PENDING",
+      status: "APPROVED",
+      verifiedAt: new Date(),
     },
     include: {
       donor: {
@@ -99,7 +100,7 @@ const createDonation = async (
   return {
     ...record,
     bloodGroupDetails: formatBloodGroupDetails(record.donor.bloodGroup),
-    message: "Donation record submitted successfully. It will be verified by an administrator.",
+    message: "রক্তদানের তথ্য সফলভাবে সংরক্ষিত এবং অনুমোদিত হয়েছে।",
   };
 };
 

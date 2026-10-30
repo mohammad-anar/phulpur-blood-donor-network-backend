@@ -28,7 +28,7 @@ const getContactMessages = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateContactMessageStatus = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const { status } = req.body;
   const result = await ContactMessageService.updateContactMessageStatus(id, status);
 
@@ -41,7 +41,7 @@ const updateContactMessageStatus = catchAsync(async (req: Request, res: Response
 });
 
 const deleteContactMessage = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await ContactMessageService.deleteContactMessage(id);
 
   sendResponse(res, {

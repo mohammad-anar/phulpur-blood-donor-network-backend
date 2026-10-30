@@ -2,7 +2,7 @@ model User {
   id                         String       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String
   phone                      String       @unique
-  email                      String?      @unique
+  email                      String?
   emailVerifiedAt            DateTime?
   emailVerificationTokenHash String?
   emailVerificationExpiresAt DateTime?

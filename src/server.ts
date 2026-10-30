@@ -1,6 +1,7 @@
 import app from "./app.js";
 import env from "./config/env.js";
 import { initSocket } from "./config/socket.js";
+import { initKeepAliveJob } from "./jobs/keepAlive.job.js";
 import { seedSuperAdmin } from "./utils/seedSuperAdmin.js";
 
 let server: any;
@@ -23,6 +24,9 @@ async function bootstrap() {
 
     // Initialize Socket.io
     initSocket(server);
+
+    // Initialize Keep-Alive Cron Job (hits root "/" route every 14 minutes)
+    initKeepAliveJob();
   } catch (error) {
     console.error("Error during server startup:", error);
     process.exit(1);

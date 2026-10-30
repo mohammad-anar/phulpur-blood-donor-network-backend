@@ -26,7 +26,7 @@ const getAllAdmins = catchAsync(async (req: Request, res: Response) => {
 });
 
 const blockAdmin = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const currentSuperAdminId = req.user.id;
   const result = await SuperAdminService.blockAdmin(id, currentSuperAdminId);
 
@@ -39,7 +39,7 @@ const blockAdmin = catchAsync(async (req: Request, res: Response) => {
 });
 
 const unblockAdmin = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const currentSuperAdminId = req.user.id;
   const result = await SuperAdminService.unblockAdmin(id, currentSuperAdminId);
 
@@ -52,7 +52,7 @@ const unblockAdmin = catchAsync(async (req: Request, res: Response) => {
 });
 
 const removeAdminRole = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const currentSuperAdminId = req.user.id;
   const result = await SuperAdminService.removeAdminRole(id, currentSuperAdminId);
 
@@ -65,7 +65,7 @@ const removeAdminRole = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const currentSuperAdminId = req.user.id;
   const result = await SuperAdminService.deleteAdmin(id, currentSuperAdminId);
 

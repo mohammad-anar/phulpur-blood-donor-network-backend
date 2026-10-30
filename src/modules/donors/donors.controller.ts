@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync.js";
-import { getSingleFilePath } from "../../utils/getFilePath.js";
+import { getSingleFilePath, uploadFileToCloudinaryOrLocal } from "../../utils/getFilePath.js";
 import pick from "../../utils/pick.js";
 import sendResponse from "../../utils/sendResponse.js";
 import { IDonorFilters } from "./donors.interface.js";
@@ -41,7 +41,7 @@ const getAllDonors = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getDonorById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const id = req.params.id as string;
   const result = await DonorsService.getDonorById(id);
 
   sendResponse(res, {
@@ -55,6 +55,11 @@ const getDonorById = catchAsync(async (req: Request, res: Response) => {
 const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user.id;
   const profileImage =
+    (await uploadFileToCloudinaryOrLocal(
+      req.files,
+      ["profileImage", "image", "avatar"],
+      "phulpur_blood_network/profiles",
+    )) ||
     getSingleFilePath(req.files, "profileImage") ||
     getSingleFilePath(req.files, "image") ||
     getSingleFilePath(req.files, "avatar");
